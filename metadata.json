@@ -1,0 +1,8 @@
+{
+  "name": "Lumina AI - Intelligent Course Architect",
+  "description": "A sophisticated AI-powered SaaS platform that transforms your learning goals into comprehensive, multi-unit courses complete with curated videos, summaries, and interactive quizzes.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
