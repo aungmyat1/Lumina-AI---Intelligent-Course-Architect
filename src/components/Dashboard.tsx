@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { Course } from '../types';
-import { ICONS } from '../constants';
+import { Course } from '@/src/types';
+import { ICONS } from '@/src/constants';
 
 interface DashboardProps {
   courses: Course[];

@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
-import { QuizQuestion } from '../types';
-import { ICONS } from '../constants';
+import { QuizQuestion } from '@/src/types';
+import { ICONS } from '@/src/constants';
 
 interface QuizProps {
   questions: QuizQuestion[];

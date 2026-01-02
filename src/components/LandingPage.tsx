@@ -1,7 +1,6 @@
-
 import React, { useState, useRef } from 'react';
-import { ICONS, SAMPLE_COURSES } from '../constants';
-import { Course } from '../types';
+import { ICONS, SAMPLE_COURSES } from '@/src/constants';
+import { Course } from '@/src/types';
 
 interface LandingPageProps {
   onStart: () => void;

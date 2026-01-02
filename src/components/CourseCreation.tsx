@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
-import { ICONS } from '../constants';
-import { generateCourseStructure, generateChapterContent } from '../services/gemini';
-import { searchYouTubeVideo } from '../services/youtube';
-import { Course, Unit, Chapter } from '../types';
+import { ICONS } from '@/src/constants';
+import { generateCourseStructure, generateChapterContent } from '@/src/services/gemini';
+import { searchYouTubeVideo } from '@/src/services/youtube';
+import { Course, Unit, Chapter } from '@/src/types';
 
 interface CourseCreationProps {
   onCourseCreated: (course: Course) => void;

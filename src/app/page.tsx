@@ -1,15 +1,16 @@
+'use client';
 
-import React, { useState, useEffect } from 'react';
-import { View, Course, UserState } from './types';
-import LandingPage from './components/LandingPage';
-import Dashboard from './components/Dashboard';
-import CourseCreation from './components/CourseCreation';
-import CourseViewer from './components/CourseViewer';
-import Navbar from './components/Navbar';
-import Pricing from './components/Pricing';
-import { SAMPLE_COURSES } from './constants';
+import { useState, useEffect } from 'react';
+import { View, Course, UserState } from '@/src/types';
+import LandingPage from '@/src/components/LandingPage';
+import Dashboard from '@/src/components/Dashboard';
+import CourseCreation from '@/src/components/CourseCreation';
+import CourseViewer from '@/src/components/CourseViewer';
+import Navbar from '@/src/components/Navbar';
+import Pricing from '@/src/components/Pricing';
+import { SAMPLE_COURSES } from '@/src/constants';
 
-const App: React.FC = () => {
+export default function HomePage() {
   const [view, setView] = useState<View>('LANDING');
   const [user, setUser] = useState<UserState>({
     isPro: false,
@@ -122,6 +123,4 @@ const App: React.FC = () => {
       </footer>
     </div>
   );
-};
-
-export default App;
+}

@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
-import { Course, Chapter, QuizQuestion } from '../types';
-import { ICONS } from '../constants';
+import { Course, Chapter, QuizQuestion } from '@/src/types';
+import { ICONS } from '@/src/constants';
 import Quiz from './Quiz';
 
 interface CourseViewerProps {

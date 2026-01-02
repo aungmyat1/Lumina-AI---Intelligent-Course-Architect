@@ -1,7 +1,6 @@
-
 import React from 'react';
-import { ICONS } from '../constants';
-import { View } from '../types';
+import { ICONS } from '@/src/constants';
+import { View } from '@/src/types';
 
 interface NavbarProps {
   view: View;

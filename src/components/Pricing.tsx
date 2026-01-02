@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { ICONS } from '../constants';
+import { ICONS } from '@/src/constants';
 
 interface PricingProps {
   onUpgrade: () => void;
