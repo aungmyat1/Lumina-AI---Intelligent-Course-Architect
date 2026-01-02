@@ -1,8 +1,12 @@
+'use client';
+
 import React, { useState } from 'react';
 import { ICONS } from '@/src/constants';
 import { generateCourseStructure, generateChapterContent } from '@/src/services/gemini';
 import { searchYouTubeVideo } from '@/src/services/youtube';
 import { Course, Unit, Chapter } from '@/src/types';
+import { Button } from '@/src/components/ui/button';
+import { Input } from '@/src/components/ui/input';
 
 interface CourseCreationProps {
   onCourseCreated: (course: Course) => void;
@@ -103,8 +107,7 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onCourseCreated, onCanc
           <div className="glass p-8 rounded-3xl border-white/10 space-y-6">
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-400">Course Topic</label>
-              <input 
-                type="text"
+              <Input 
                 placeholder="e.g. Modern Web Development with Next.js or Italian Home Cooking"
                 className="w-full bg-black/50 border border-gray-700 rounded-xl px-5 py-4 focus:outline-none focus:border-blue-500 transition-colors text-lg"
                 value={title}
@@ -114,19 +117,20 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onCourseCreated, onCanc
             </div>
 
             <div className="flex items-center gap-4">
-              <button 
+              <Button 
                 onClick={handleGenerate}
                 disabled={!title.trim()}
                 className="flex-grow py-4 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all rounded-xl font-bold text-lg"
               >
                 Generate Course Structure
-              </button>
-              <button 
+              </Button>
+              <Button 
+                variant="outline"
                 onClick={onCancel}
                 className="px-6 py-4 glass border-gray-700 rounded-xl font-semibold hover:bg-white/5 transition-all"
               >
                 Cancel
-              </button>
+              </Button>
             </div>
           </div>
 
