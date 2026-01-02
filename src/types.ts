@@ -42,3 +42,31 @@ export interface UserState {
   isPro: boolean;
   courses: Course[];
 }
+
+// NextAuth session type augmentations
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      id: string;
+      name?: string;
+      email?: string;
+      image?: string;
+      isPro: boolean;
+    };
+  }
+
+  interface User {
+    id: string;
+    email: string;
+    name?: string;
+    image?: string;
+    isPro: boolean;
+  }
+}
+
+declare module 'next-auth/jwt' {
+  interface JWT {
+    id: string;
+    isPro: boolean;
+  }
+}
