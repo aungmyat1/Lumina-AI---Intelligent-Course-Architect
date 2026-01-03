@@ -53,7 +53,7 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onCourseCreated, onCanc
       const units: Unit[] = [];
       
       if (structure.units) {
-        let totalChapters = structure.units.reduce((acc, u) => acc + u.chapters.length, 0);
+        let totalChapters = structure.units.reduce((acc: number, u: { chapters: any[] }) => acc + u.chapters.length, 0);
         let completedChapters = 0;
 
         for (const unitData of structure.units) {
