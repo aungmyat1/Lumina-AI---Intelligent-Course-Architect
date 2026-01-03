@@ -1,34 +1,44 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { Course, Unit, Chapter } from "../src/types";
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Course, Unit, Chapter } from "../types";
 
 export const generateCourseStructure = async (title: string): Promise<Partial<Course>> => {
-  const response = await ai.models.generateContent({
-    model: "gemini-3-pro-preview",
+  // Check if we're on the server side
+  if (typeof window !== 'undefined') {
+    throw new Error("This function should only be called server-side");
+  }
+  
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not set in environment variables");
+  }
+  
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const model = genAI.getGenerativeModel({ model: "gemini-3-pro-preview" });
+
+  const result = await model.generateContent({
     contents: `Generate a detailed course structure for a course titled "${title}". 
     Create 3-5 units, each with 2-4 chapters. 
     Each chapter needs a title and a brief learning objective description.`,
-    config: {
+    generationConfig: {
       responseMimeType: "application/json",
       responseSchema: {
-        type: Type.OBJECT,
+        type: "object",
         properties: {
-          title: { type: Type.STRING },
-          description: { type: Type.STRING },
+          title: { type: "string" },
+          description: { type: "string" },
           units: {
-            type: Type.ARRAY,
+            type: "array",
             items: {
-              type: Type.OBJECT,
+              type: "object",
               properties: {
-                title: { type: Type.STRING },
+                title: { type: "string" },
                 chapters: {
-                  type: Type.ARRAY,
+                  type: "array",
                   items: {
-                    type: Type.OBJECT,
+                    type: "object",
                     properties: {
-                      title: { type: Type.STRING },
-                      description: { type: Type.STRING }
+                      title: { type: "string" },
+                      description: { type: "string" }
                     },
                     required: ["title", "description"]
                   }
@@ -43,27 +53,39 @@ export const generateCourseStructure = async (title: string): Promise<Partial<Co
     }
   });
 
-  return JSON.parse(response.text);
+  return JSON.parse(result.response.text());
 };
 
 export const generateChapterContent = async (chapterTitle: string, unitTitle: string): Promise<{ summary: string, quiz: any[] }> => {
-  const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+  // Check if we're on the server side
+  if (typeof window !== 'undefined') {
+    throw new Error("This function should only be called server-side");
+  }
+  
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) {
+    throw new Error("GEMINI_API_KEY is not set in environment variables");
+  }
+  
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+
+  const result = await model.generateContent({
     contents: `For the chapter "${chapterTitle}" in the unit "${unitTitle}", generate a comprehensive summary and 3 multiple choice questions for a quiz.`,
-    config: {
+    generationConfig: {
       responseMimeType: "application/json",
       responseSchema: {
-        type: Type.OBJECT,
+        type: "object",
         properties: {
-          summary: { type: Type.STRING },
+          summary: { type: "string" },
           quiz: {
-            type: Type.ARRAY,
+            type: "array",
             items: {
-              type: Type.OBJECT,
+              type: "object",
               properties: {
-                question: { type: Type.STRING },
-                options: { type: Type.ARRAY, items: { type: Type.STRING } },
-                correctAnswerIndex: { type: Type.NUMBER }
+                question: { type: "string" },
+                options: { type: "array", items: { type: "string" } },
+                correctAnswerIndex: { type: "number" }
               },
               required: ["question", "options", "correctAnswerIndex"]
             }
@@ -74,5 +96,5 @@ export const generateChapterContent = async (chapterTitle: string, unitTitle: st
     }
   });
 
-  return JSON.parse(response.text);
+  return JSON.parse(result.response.text());
 };

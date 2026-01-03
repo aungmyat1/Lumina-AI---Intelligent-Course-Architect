@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { ICONS } from '@/src/constants';
-import { generateCourseStructure, generateChapterContent } from '@/src/services/gemini';
 import { searchYouTubeVideo } from '@/src/services/youtube';
 import { Course, Unit, Chapter } from '@/src/types';
 import { Button } from '@/src/components/ui/button';
@@ -19,6 +18,24 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onCourseCreated, onCanc
   const [status, setStatus] = useState('');
   const [progress, setProgress] = useState(0);
 
+  const callGeminiAPI = async (action: string, data: any) => {
+    const response = await fetch('/api/gemini', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action, ...data }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Failed to generate content');
+    }
+
+    const result = await response.json();
+    return result.result;
+  };
+
   const handleGenerate = async () => {
     if (!title.trim()) return;
     
@@ -28,7 +45,7 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onCourseCreated, onCanc
 
     try {
       // Step 1: Generate Structure
-      const structure = await generateCourseStructure(title);
+      const structure = await callGeminiAPI('generateCourseStructure', { title });
       setProgress(40);
       setStatus('Curating high-quality learning materials...');
 
@@ -47,7 +64,10 @@ const CourseCreation: React.FC<CourseCreationProps> = ({ onCourseCreated, onCanc
             // Parallel fetch video and summary/quiz
             const [youtubeId, aiContent] = await Promise.all([
               searchYouTubeVideo(`${title} ${chapterData.title}`),
-              generateChapterContent(chapterData.title, unitData.title)
+              callGeminiAPI('generateChapterContent', { 
+                chapterTitle: chapterData.title, 
+                unitTitle: unitData.title 
+              })
             ]);
 
             chapters.push({
