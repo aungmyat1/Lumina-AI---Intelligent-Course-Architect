@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  name        String?
-  isPro       Boolean  @default(false)
-  courses     Course[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  isPro     Boolean  @default(false)
+  credits   Int      @default(10) // Default credits for new users
+  courses   Course[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Course {
@@ -30,13 +31,13 @@ model Course {
 }
 
 model Unit {
-  id          String   @id @default(cuid())
-  title       String
-  courseId    String
-  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  chapters    Chapter[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String    @id @default(cuid())
+  title     String
+  courseId  String
+  course    Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  chapters  Chapter[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Chapter {
@@ -54,25 +55,27 @@ model Chapter {
 }
 
 model QuizQuestion {
-  id               String        @id @default(cuid())
-  question         String
-  chapterId        String
-  chapter          Chapter       @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  options          QuizOption[]
-  correctOptionId  String
-  correctOption    QuizOption    @relation("CorrectOption", fields: [correctOptionId], references: [id])
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
+  id              String       @id @default(cuid())
+  question        String
+  chapterId       String
+  chapter         Chapter      @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  options         QuizOption[]
+  correctOptionId String
+  correctOption   QuizOption   @relation("CorrectOption", fields: [correctOptionId], references: [id])
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 }
 
 model QuizOption {
-  id            String         @id @default(cuid())
-  text          String
-  questionId    String
-  question      QuizQuestion   @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  isCorrect     Boolean        @default(false)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  
+  id                 String         @id @default(cuid())
+  text               String
+  questionId         String
+  question           QuizQuestion   @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  isCorrect          Boolean        @default(false)
+  // Reverse relation for the correct option relationship
+  correctInQuestions QuizQuestion[] @relation("CorrectOption")
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
   @@index([questionId])
 }

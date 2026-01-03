@@ -21,11 +21,12 @@ export const authOptions: NextAuthOptions = {
     error: '/auth/error', // Error code passed in query string as ?error=
   },
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, profile }) {
       // Initial sign in
       if (account && user) {
         token.id = user.id;
         token.isPro = user.isPro;
+        token.credits = user.credits;
       }
       
       return token;
@@ -38,9 +39,18 @@ export const authOptions: NextAuthOptions = {
       if (token.isPro !== undefined) {
         session.user.isPro = token.isPro as boolean;
       }
+      if (token.credits !== undefined) {
+        session.user.credits = token.credits as number;
+      }
       
       return session;
     },
+    // Handle account creation with default credits
+    async signIn({ user, account, profile }) {
+      // This callback runs after user creation or sign in
+      // The Prisma adapter will handle the default credits value (10) from schema
+      return true; // Allow sign in
+    }
   },
 };
 
